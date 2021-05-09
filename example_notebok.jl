@@ -116,6 +116,19 @@ let
 			palette=ReproducePlotUtils.custom_colorant)
 end
 
+# ╔═╡ e564bfe9-7c26-49f8-a956-42b11a706ba1
+let
+	args = [
+		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"GRU"),
+		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"AAGRU"),
+		Dict("numhidden"=>10, "truncation"=>12, "cell"=>"MAGRU")
+		]
+	density(data_col_box, args;
+			label_idx="cell", 
+			legend=false, 
+			palette=ReproducePlotUtils.custom_colorant)
+end
+
 # ╔═╡ eb41c814-0e4b-4087-b35c-1a5626c87167
 let
 	get_data = (x)->ReproducePlotUtils.get_MUE(x, :successes)
@@ -131,6 +144,9 @@ let
 	end
 	d, pms
 end
+
+# ╔═╡ f5524caa-825e-444f-9f4a-627f8c7b67d3
+
 
 # ╔═╡ Cell order:
 # ╠═565f87b8-b04e-11eb-38ac-bfec45a98555
@@ -148,4 +164,6 @@ end
 # ╠═5e461d4b-98a5-4305-a579-78e59c4c62e7
 # ╠═78a8f6b0-6425-434b-b2be-a30df9c2df39
 # ╠═85c8a929-5c1d-4375-b2a0-a5f6f1db4e4b
+# ╠═e564bfe9-7c26-49f8-a956-42b11a706ba1
 # ╠═eb41c814-0e4b-4087-b35c-1a5626c87167
+# ╠═f5524caa-825e-444f-9f4a-627f8c7b67d3

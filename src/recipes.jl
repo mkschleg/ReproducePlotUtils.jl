@@ -17,7 +17,7 @@ custom_colorant = [
 # Sensitivity
 # Performance Curves
 # HeatMap Sensitivity
-
+stats_plot_types = [:violin, :boxplot, :density]
 
 @recipe function f(dc::DataCollection, params::Dict)
     idx = findall(dc.data) do ld
@@ -59,7 +59,7 @@ end
     ld_sorted = sort(ld_vec.data, lt=sf)
 
     st = get(plotattributes, :seriestype, :path)
-    if st ∈ [:violin, :boxplot]
+    if st ∈ stats_plot_types
         for ld in ld_sorted
             @series begin
                 label_idx --> sort_idx
@@ -77,7 +77,7 @@ end
 
 @recipe function f(ld::LineData{Vector{F}}; label_idx=1, z=1.0) where F<:Number
     st = get(plotattributes, :seriestype, :path)
-    if st ∈ [:violin, :boxplot]
+    if st ∈ stats_plot_types
         y = ld.data
         x = [ld.line_params[label_idx]]
         (x, y)

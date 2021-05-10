@@ -17,7 +17,7 @@ custom_colorant = [
 # Sensitivity
 # Performance Curves
 # HeatMap Sensitivity
-stats_plot_types = [:violin, :boxplot, :density, :histogram, :histogram2d, :groupedhist]
+stats_plot_types = [:violin, :boxplot, :dotplot, :density, :histogram, :histogram2d, :groupedhist]
 
 @recipe function f(dc::DataCollection, params::Dict)
     idx = findall(dc.data) do ld
@@ -107,13 +107,18 @@ end
     st = get(plotattributes, :seriestype, :path)
     if st ∈ stats_plot_types
         y = vcat(transpose.(ld.data)...)
-        (y)
+        if :x ∈ keys(plotattributes)
+            (plotattributes[:x], y)
+        else
+            (y)
+        end
     else
         ribbon := std_uneven(ld.data; z=z)
         μ = mean_uneven(ld.data)
         y = μ
         x --> 1:length(μ)
-        (y)
+ 
+        (plotattributes[:x], y)
     end
 
 end

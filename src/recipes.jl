@@ -80,7 +80,7 @@ end
 end
 
 @recipe function f(ld::LineData{Vector{F}}; label_idx=1, z=1.0) where F<:Number
-    st = get(plotattributes, :seriestype, :path)
+    st = get(plotattributes, :seriestype, :boxplot)
     if st ∈ stats_plot_types
         y = ld.data
         x = [ld.line_params[label_idx]]
@@ -105,19 +105,16 @@ end
     end
 
     st = get(plotattributes, :seriestype, :path)
-
     if st ∈ stats_plot_types
         y = vcat(transpose.(ld.data)...)
-        y
+        (y)
     else
         ribbon := std_uneven(ld.data; z=z)
         μ = mean_uneven(ld.data)
         y = μ
-        x = 1:length(μ)
-        (x, y)
+        x --> 1:length(μ)
+        (y)
     end
 
-    
-    ()
 end
 

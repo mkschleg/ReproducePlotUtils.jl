@@ -17,7 +17,7 @@ custom_colorant = [
 # Sensitivity
 # Performance Curves
 # HeatMap Sensitivity
-stats_plot_types = [:violin, :boxplot, :density]
+stats_plot_types = [:violin, :boxplot, :density, :histogram, :histogram2d, :groupedhist]
 
 @recipe function f(dc::DataCollection, params::Dict)
     idx = findall(dc.data) do ld

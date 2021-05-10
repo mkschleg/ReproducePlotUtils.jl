@@ -108,12 +108,24 @@ let
 	args = [
 		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"RNN"),
 		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"AARNN"),
-		Dict("numhidden"=>10, "truncation"=>12, "cell"=>"MARNN")
+		Dict("numhidden"=>10, "truncation"=>12, "cell"=>"MARNN"),
+		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"GRU"),
+		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"AAGRU"),
+		Dict("numhidden"=>10, "truncation"=>12, "cell"=>"MAGRU")
 		]
-	boxplot(data_col_box, args; 
+	# args = Dict("numhidden"=>10, "truncation"=>12)
+	plt = boxplot(data_col_box, args; 
 			label_idx="cell", 
 			legend=false, 
-			palette=ReproducePlotUtils.custom_colorant)
+			palette=ReproducePlotUtils.custom_colorant,
+			trim=true)
+	# boxplot!(data_col_box, args; 
+	# 		label_idx="cell", 
+	# 		legend=false, 
+	# 		palette=ReproducePlotUtils.custom_colorant,
+	# 		show_median=true, lw=2, outliers=true, range=1.5)
+	savefig("dir_tmaze_box_plot.pdf")
+	plt
 end
 
 # ╔═╡ e564bfe9-7c26-49f8-a956-42b11a706ba1
@@ -123,7 +135,7 @@ let
 		Dict("numhidden"=>20, "truncation"=>12, "cell"=>"AAGRU"),
 		Dict("numhidden"=>10, "truncation"=>12, "cell"=>"MAGRU")
 		]
-	density(data_col_box, args;
+	violin(data_col_box, args;
 			label_idx="cell", 
 			legend=false, 
 			palette=ReproducePlotUtils.custom_colorant)

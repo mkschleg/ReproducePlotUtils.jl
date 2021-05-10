@@ -32,12 +32,21 @@ function load_runs(ic, get_data)
     d = typeof(tmp)[]
 
     diff_dict = diff(ic)
-    pms_template = NamedTuple(Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))
+    # pms_template = NamedTuple(Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))
+    pms_template = @static if VERSION <= v"1.5"
+        (; Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))
+    else
+        NamedTuple(Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))
+    end
     pms = typeof(pms_template)[]
     
     for (idx, item) ∈ enumerate(ic)
         push!(d, get_data(FileIO.load(joinpath(item.folder_str, "results.jld2"))))
-        push!(pms, NamedTuple(Symbol(k)=>item.parsed_args[k] for k ∈ keys(diff_dict)))
+        @static if VERSION <= v"1.5"
+            push!(pms, (; Symbol(k)=>item.parsed_args[k] for k ∈ keys(diff_dict)))
+        else
+            push!(pms, NamedTuple(Symbol(k)=>item.parsed_args[k] for k ∈ keys(diff_dict)))
+        end
     end
     d, pms
 end

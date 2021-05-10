@@ -99,14 +99,24 @@ end
         lbl = prod(string(ld.line_params[k]) * " " for k in ks)
 	label := "$(lbl), $(ld.swept_params)"
     end
-    ribbon := std_uneven(ld.data; z=z)
+
     if !(color_dict isa Nothing)
         color --> color_dict[ld.line_params]
     end
-    
-    μ = mean_uneven(ld.data)
-    y := μ
-    x := 1:length(μ)
+
+    st = get(plotattributes, :seriestype, :path)
+
+    if st ∈ stats_plot_types
+        y = vcat(transpose.(ld.data)...)
+        y
+    else
+        ribbon := std_uneven(ld.data; z=z)
+        μ = mean_uneven(ld.data)
+        y = μ
+        x = 1:length(μ)
+        (x, y)
+    end
+
     
     ()
 end

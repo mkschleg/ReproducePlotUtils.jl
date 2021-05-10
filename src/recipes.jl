@@ -53,10 +53,14 @@ end
     end
 end
 
-@recipe function f(ld_vec::DataCollection{LD}; sort_idx=1, z=1.0) where {F<:Number, LD<:LineData{Vector{F}}}
+@recipe function f(ld_vec::DataCollection{LD}; sort_idx=nothing, z=1.0) where {F<:Number, LD<:LineData{Vector{F}}}
 
-    sf = (ld1::LineData, ld2::LineData) -> isless(ld1.line_params[sort_idx], ld2.line_params[sort_idx])
-    ld_sorted = sort(ld_vec.data, lt=sf)
+    ld_sorted = if sort_idx isa Nothing
+        ld_vec.data
+    else
+        sf = (ld1::LineData, ld2::LineData) -> isless(ld1.line_params[sort_idx], ld2.line_params[sort_idx])
+        sort(ld_vec.data, lt=sf)
+    end
 
     st = get(plotattributes, :seriestype, :path)
     if st ∈ stats_plot_types

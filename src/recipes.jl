@@ -43,11 +43,14 @@ end
     dc[idx]
 end
 
-@recipe function f(dc::DataCollection)
+@recipe function f(dc::DataCollection; color_func=nothing)
 
     legendtitle --> "$(join(sort(collect(keys(dc[1].line_params))), ' '))"
     for d ∈ dc.data
         @series begin
+            if !(color_func isa Nothing)
+                color --> color_func(d)
+            end
             d
         end
     end
@@ -110,7 +113,7 @@ end
         if :x ∈ keys(plotattributes)
             (plotattributes[:x], y)
         else
-            (y)
+            (1:length(ld.data[1]), y)
         end
     else
         ribbon := std_uneven(ld.data; z=z)

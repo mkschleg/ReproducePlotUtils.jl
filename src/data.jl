@@ -123,7 +123,7 @@ function get_line_data_for(
         collect(Iterators.product([ic_diff[k] for k ∈ line_keys]...))
     end
 
-    strg = LineData[]
+    strg = Vector{LineData}(undef, length(params))
 
     Threads.@threads for p_idx ∈ 1:length(params)
 	p = params[p_idx]
@@ -143,13 +143,62 @@ function get_line_data_for(
 	        get_data)
             
             if line_keys isa String
-                push!(strg, LineData(Dict(line_keys=>params[p_idx]), ps, d, dp, c))
+                strg[p_idx] =
+                    LineData(Dict(line_keys=>params[p_idx]), ps, d, dp, c)
             else
-                push!(strg, LineData(Dict(line_keys[i]=>params[p_idx][i] for i in 1:length(line_keys)), ps, d, dp, c))
+                strg[p_idx] =
+                    LineData(Dict(line_keys[i]=>params[p_idx][i] for i in 1:length(line_keys)), ps, d, dp, c)
             end
 
         end
     end
     DataCollection(convert(Vector{typeof(strg[1])}, strg))
 end
+
+
+
+# function get_data_frame_for(
+#     ic::ItemCollection,
+#     line_keys,
+#     param_keys;
+#     comp,
+#     get_comp_data,
+#     get_data)
+    
+#     ic_diff = diff(ic)
+#     params = if line_keys isa String
+#         ic_diff[line_keys]
+#     else
+#         collect(Iterators.product([ic_diff[k] for k ∈ line_keys]...))
+#     end
+
+#     strg = LineData[]
+
+#     Threads.@threads for p_idx ∈ 1:length(params)
+# 	p = params[p_idx]
+
+# 	sub_ic = if line_keys isa String
+#             search(ic, Dict(line_keys=>p))
+#         else
+#             search(ic, Dict(line_keys[i]=>p[i] for i ∈ 1:length(p)))
+#         end
+        
+#         if !isempty(sub_ic)
+# 	    d, dp, c, ps = find_best_params(
+# 	        sub_ic,
+# 	        param_keys,
+#                 comp,
+# 	        get_comp_data,
+# 	        get_data)
+            
+#             if line_keys isa String
+#                 push!(strg, LineData(Dict(line_keys=>params[p_idx]), ps, d, dp, c))
+#             else
+#                 push!(strg, LineData(Dict(line_keys[i]=>params[p_idx][i] for i in 1:length(line_keys)), ps, d, dp, c))
+#             end
+
+#         end
+#     end
+#     DataCollection(convert(Vector{typeof(strg[1])}, strg))
+# end
 

@@ -82,11 +82,15 @@ end
     end
 end
 
-@recipe function f(ld::LineData{Vector{F}}; label_idx=1, z=1.0) where F<:Number
+@recipe function f(ld::LineData{Vector{F}}; label_idx=1, make_label_string=false, z=1.0) where F<:Number
     st = get(plotattributes, :seriestype, :boxplot)
     if st ∈ stats_plot_types
         y = ld.data
-        x = [ld.line_params[label_idx]]
+        x = if make_label_string
+            [string(ld.line_params[label_idx])]
+        else
+            [ld.line_params[label_idx]]
+        end
         (x, y)
     else
         error("$(typeof(ld)) not supported for series type: $(st).")

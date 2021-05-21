@@ -76,7 +76,7 @@ end
     else
         x = [ld.line_params[sort_idx] for ld in ld_sorted]
         y = [mean(ld.data) for ld in ld_sorted]
-        yerror := [z*sqrt(var(ld.data))/length(ld.data) for ld in ld_sorted]
+        yerror := [z*sqrt(var(ld.data)/length(ld.data)) for ld in ld_sorted]
 
         (x, y)
     end

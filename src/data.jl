@@ -29,7 +29,7 @@ Base.eltype(dc::DataCollection) = eltype(dc.data)
 
 function load_runs(ic, get_data)
     tmp = get_data(FileIO.load(joinpath(ic[1].folder_str, "results.jld2")))
-    d = Array{typeof(tmp), 1}(undef, length(ic))
+    d = typeof(tmp)[]
 
     diff_dict = diff(ic)
     # pms_template = NamedTuple(Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))
@@ -125,7 +125,7 @@ function get_line_data_for(
 
     strg = Vector{LineData}(undef, length(params))
 
-    for p_idx ∈ 1:length(params)
+    Threads.@threads for p_idx ∈ 1:length(params)
 	p = params[p_idx]
 
 	sub_ic = if line_keys isa String

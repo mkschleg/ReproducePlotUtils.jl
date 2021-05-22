@@ -125,7 +125,7 @@ function get_line_data_for(
 
     strg = Vector{LineData}(undef, length(params))
 
-    Threads.@threads for p_idx ∈ 1:length(params)
+    for p_idx ∈ 1:length(params)
 	p = params[p_idx]
 
 	sub_ic = if line_keys isa String

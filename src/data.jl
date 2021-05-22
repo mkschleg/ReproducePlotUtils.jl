@@ -29,7 +29,7 @@ Base.eltype(dc::DataCollection) = eltype(dc.data)
 
 function load_runs(ic, get_data)
     tmp = get_data(FileIO.load(joinpath(ic[1].folder_str, "results.jld2")))
-    d = typeof(tmp)[]
+    d = Array{typeof(tmp), 1}(undef, length(ic))
 
     diff_dict = diff(ic)
     # pms_template = NamedTuple(Symbol(k)=>diff_dict[k][1] for k ∈ keys(diff_dict))

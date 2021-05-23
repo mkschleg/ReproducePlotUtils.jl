@@ -56,7 +56,7 @@ end
     end
 end
 
-@recipe function f(ld_vec::DataCollection{LD}; sort_idx=nothing, z=1.0) where {F<:Number, LD<:LineData{Vector{F}}}
+@recipe function f(ld_vec::DataCollection{LD}; sort_idx=nothing, z=1.0, color_func=nothing) where {F<:Number, LD<:LineData{Vector{F}}}
 
     ld_sorted = if sort_idx isa Nothing
         ld_vec.data
@@ -64,7 +64,10 @@ end
         sf = (ld1::LineData, ld2::LineData) -> isless(ld1.line_params[sort_idx], ld2.line_params[sort_idx])
         sort(ld_vec.data, lt=sf)
     end
-
+    if !(color_func isa Nothing)
+        color --> color_func(d)
+    end
+    
     st = get(plotattributes, :seriestype, :path)
     if st ∈ stats_plot_types
         for ld in ld_sorted

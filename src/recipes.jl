@@ -64,6 +64,7 @@ end
         sf = (ld1::LineData, ld2::LineData) -> isless(ld1.line_params[sort_idx], ld2.line_params[sort_idx])
         sort(ld_vec.data, lt=sf)
     end
+    
     if !(color_func isa Nothing)
         color --> color_func(d)
     end
@@ -89,12 +90,17 @@ end
     st = get(plotattributes, :seriestype, :boxplot)
     if st ∈ stats_plot_types
         y = ld.data
-        x = if make_label_string
-            [string(ld.line_params[label_idx])]
+        if !(label_idx isa Nothing)
+            if make_label_string
+                [string(ld.line_params[label_idx])]
+            else
+                [ld.line_params[label_idx]]
+            end
+            (x,y)
         else
-            [ld.line_params[label_idx]]
+            y
+            # (x, y)
         end
-        (x, y)
     else
         error("$(typeof(ld)) not supported for series type: $(st).")
     end

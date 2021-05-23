@@ -96,9 +96,16 @@ end
             else
                 [ld.line_params[label_idx]]
             end
-            (x,y)
+            (x, y)
         else
-            y
+            x = if :x ∈ keys(plotattributes)
+                plotattributes[:x]
+            elseif :label ∈ keys(plotattributes)
+                [plotattributes[:label]]
+            else
+                throw("Need x or label when not using label_idx.")
+            end
+            (x, y)
         end
     else
         error("$(typeof(ld)) not supported for series type: $(st).")

@@ -99,7 +99,6 @@ end
             (x,y)
         else
             y
-            # (x, y)
         end
     else
         error("$(typeof(ld)) not supported for series type: $(st).")

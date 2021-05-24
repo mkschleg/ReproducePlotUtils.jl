@@ -123,8 +123,9 @@ function get_line_data_for(
         collect(Iterators.product([ic_diff[k] for k ∈ line_keys]...))
     end
 
-    strg = Vector{LineData}(undef, length(params))
-
+    strg = LineData[]
+    lk = ReentrantLock()
+    
     Threads.@threads for p_idx ∈ 1:length(params)
 	p = params[p_idx]
 
@@ -142,12 +143,14 @@ function get_line_data_for(
 	        get_comp_data,
 	        get_data)
             
-            if line_keys isa String
-                strg[p_idx] =
-                    LineData(Dict(line_keys=>params[p_idx]), ps, d, dp, c)
+            ld = if line_keys isa String
+                LineData(Dict(line_keys=>params[p_idx]), ps, d, dp, c)
             else
-                strg[p_idx] =
-                    LineData(Dict(line_keys[i]=>params[p_idx][i] for i in 1:length(line_keys)), ps, d, dp, c)
+                LineData(Dict(line_keys[i]=>params[p_idx][i] for i in 1:length(line_keys)), ps, d, dp, c)
+            end
+            
+            lock(lk) do
+                push!(strg, ld)
             end
 
         end

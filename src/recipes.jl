@@ -86,12 +86,12 @@ end
     end
 end
 
-@recipe function f(ld::LineData{Vector{F}}; label_idx=1, make_label_string=false, z=1.0) where F<:Number
+@recipe function f(ld::LineData{Vector{F}}; label_idx=nothing, make_label_string=false, z=1.0) where F<:Number
     st = get(plotattributes, :seriestype, :boxplot)
     if st ∈ stats_plot_types
         y = ld.data
         if !(label_idx isa Nothing)
-            if make_label_string
+            x = if make_label_string
                 [string(ld.line_params[label_idx])]
             else
                 [ld.line_params[label_idx]]
@@ -103,7 +103,7 @@ end
             elseif :label ∈ keys(plotattributes)
                 [plotattributes[:label]]
             else
-                throw("Need x or label when not using label_idx.")
+                throw("Need :x or :label when not using label_idx.")
             end
             (x, y)
         end

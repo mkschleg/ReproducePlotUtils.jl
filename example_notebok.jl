@@ -70,7 +70,7 @@ data_col_eps = ReproducePlotUtils.get_line_data_for(
                get_data=(x)->ReproducePlotUtils.get_extended_line(x, :successes, :total_steps, n=500))
 
 # ╔═╡ e5331c45-6171-45a9-a537-9e3c64c17fd6
-plot(data_col_eps, Dict("numhidden"=>15, "truncation"=>20, "cell"=>"MAGRU"), palette=ReproducePlotUtils.custom_colorant, legend=:topleft, z=1.0, xscale=:log)
+plot(data_col_eps, Dict("numhidden"=>15, "truncation"=>20, "cell"=>"MAGRU"), palette=ReproducePlotUtils.custom_colorant, legend=:topleft, z=1.0)
 
 # ╔═╡ 3a23313d-ed57-4faa-b2b0-bec1d549c255
 data_col_box = ReproducePlotUtils.get_line_data_for(

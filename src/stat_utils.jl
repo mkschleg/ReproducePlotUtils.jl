@@ -24,5 +24,5 @@ function std_uneven(d::Vector{Array{F, 1}}; z=1.0) where {F}
         ret[1:length(v)] .+= (v .- m[1:length(v)]).^2
         n[1:length(v)] .+= 1
     end
-    z * sqrt.(ret ./ n)
+    z * sqrt.(ret ./ (n)) ./ sqrt.(n)
 end
